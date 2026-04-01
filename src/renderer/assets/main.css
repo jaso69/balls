@@ -1,0 +1,594 @@
+@import "tailwindcss";
+@import './base.css';
+
+.ocultar {
+  display: none;
+}
+
+.m1 {
+  width: 25px;
+  position: absolute;        /* centrado horizontal */
+  transform: translateX(-50%); /* centra perfectamente */
+  opacity: 0.7;          /* brillo base */
+  animation: c1 2s ease-in-out infinite; /* 4s = ritmo lento */
+}
+
+.m2 {
+  position: absolute;
+  width: 45px;          /* ajusta tamaño */             /* centrado horizontal */
+  transform: translateX(-50%); /* centra perfectamente */
+  opacity: 0.7;          /* brillo base */
+  animation: c2 3s ease-in-out infinite; /* 4s = ritmo lento */
+}
+
+.p1 {
+  top: 10%;              /* posición vertical fija */
+  left: 5%;
+}
+
+.p2 {
+  top: 15%;              /* posición vertical fija */
+  left: 85%;
+}
+
+.p3 {
+  top: 25%;              /* posición vertical fija */
+  left: 65%;
+}
+
+.p4 {
+  top: 36%;              /* posición vertical fija */
+  left: 26%;
+}
+
+.p5 {
+  top: 46%;              /* posición vertical fija */
+  left: 61%;
+}
+
+.p6 {
+  top: 53%;              /* posición vertical fija */
+  left: 40%;
+}
+
+.p7 {
+  top: 63%;              /* posición vertical fija */
+  left: 70%;
+}
+
+.p8 {
+  top: 75%;              /* posición vertical fija */
+  left: 17%;
+}
+
+@keyframes c1 {
+  0%, 100% { opacity: 0; }    /* casi invisible */
+  50%      { opacity: 1; }      /* máximo brillo */
+}
+
+@keyframes c2 {
+  0%, 100% { opacity: 0; }    /* casi invisible */
+  50%      { opacity: 1; }      /* máximo brillo */
+}
+
+/* Contenedor principal (tu background o body) */
+body, .background-container {
+  position: relative;
+  background-image: url('./fondo.png');
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: manipulation; /* mejora touch en pantallas grandes */
+}
+
+text-naturgy {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  background-image: url('./naturgy-Logo.png');
+}
+/* Estilo de la bola/orbe */
+.orb {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background-size: 100px 100px;
+  background-image: url('./cci.webp');
+
+  pointer-events: none;
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite;   /* latido sutil */
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+}
+
+.orb1 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand1 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite,   /* latido sutil */
+    orb-movingRight 2s ease-in-out forwards;
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+}
+
+.orb2 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand1 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite,   /* latido sutil */
+    orb-movingLeft 2s ease-in-out forwards;
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+}
+
+.orb3 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand1 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite,   /* latido sutil */
+    orb-movingUp 2s ease-in-out forwards;
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+}
+
+.orb4 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand1 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite,   /* latido sutil */
+    orb-movingDown 2s ease-in-out forwards;
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+}
+
+.orb5 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand1 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite,   /* latido sutil */
+    orb-movingUpRight 2s ease-in-out forwards;
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+}
+
+.orb6 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand1 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite,   /* latido sutil */
+    orb-movingUpLeft 2s ease-in-out forwards;
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+.orb6:hover{
+  transform: translate(-105px, -105px) scale(1.5) !important;
+  box-shadow: /* Aumentar el brillo en hover */
+    0 0 10px #ffffff,
+    0 0 15px #a5d8ff,
+    0 0 20px #4dabf7,
+    0 0 25px #228be6,
+    0 0 30px #1c7ed6;
+  z-index: 100;
+}
+
+.orb7 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand1 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite,   /* latido sutil */
+    orb-movingDownRight 2s ease-in-out forwards;
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+.orb7:hover{
+  transform: translate(155px, 135px) scale(1.5) !important;
+  box-shadow: /* Aumentar el brillo en hover */
+    0 0 10px #ffffff,
+    0 0 15px #a5d8ff,
+    0 0 20px #4dabf7,
+    0 0 25px #228be6,
+    0 0 30px #1c7ed6;
+  z-index: 100;
+}
+
+.orb8 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  /* Glow neon intenso (múltiples capas) */
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 6px #a5d8ff,
+    0 0 10px #4dabf7,
+    0 0 15px #228be6,
+    0 0 20px #1c7ed6; /* capa más externa para bloom */
+
+  animation:
+    orb-expand1 1.5s ease-out forwards,   /* expansión */
+    orb-pulse 2s ease-in-out infinite,   /* latido sutil */
+    orb-movingDownLeft 2s ease-in-out forwards;
+
+  will-change: transform, width, height, box-shadow;
+  filter: brightness(1.2) contrast(1.1); /* boost neon */
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+.orb8:hover{
+  transform: translate(-105px, 135px) scale(1.5) !important;
+  box-shadow: /* Aumentar el brillo en hover */
+    0 0 10px #ffffff,
+    0 0 15px #a5d8ff,
+    0 0 20px #4dabf7,
+    0 0 25px #228be6,
+    0 0 30px #1c7ed6;
+  z-index: 100;
+}
+
+.icon {
+   opacity: 0.1;
+  animation: icon-appear 2.5s ease-out forwards;
+}
+
+.fade-out {
+  opacity: 1;
+  animation: fadeOut 2s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    scale: 0.1;
+  }
+}
+
+@keyframes icon-appear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  to {
+    opacity: 0.9;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes orb-expand1 {
+  0% {
+    width: 0;
+    height: 0;
+    box-shadow:
+      0 0 2px #ffffff,
+      0 0 4px #ec2f0e;
+  }
+  100% {
+    width: 60px;     /* tamaño final – ajústalo si quieres más grande/pequeño */
+    height: 60px;
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6; /* glow máximo al final */
+  }
+}
+
+/* Expansión: crece pero no se desvanece */
+@keyframes orb-expand {
+  0% {
+    width: 0;
+    height: 0;
+    box-shadow:
+      0 0 2px #ffffff,
+      0 0 4px #a5d8ff;
+  }
+  100% {
+    width: 100px;     /* tamaño final – ajústalo si quieres más grande/pequeño */
+    height: 100px;
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6; /* glow máximo al final */
+  }
+}
+
+/* Pulsación neon (late suavemente para efecto vivo) */
+@keyframes orb-pulse {
+  0%, 100% {
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  50% {
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@keyframes orb-movingRight {
+  0% {
+    transform: translate(0, 30px) scale(0.1);
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  100% {
+    transform: translate(200px, 30px) scale(1.0); /* leve agrandamiento */
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@keyframes orb-movingLeft {
+  0% {
+    transform: translate(0px, 30px) scale(0.1);
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  100% {
+    transform: translate(-160px, +30px) scale(1); /* leve agrandamiento */
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@keyframes orb-movingUp {
+  0% {
+    transform: translate(20px, 0) scale(0.1);
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  100% {
+    transform: translate(20px, -160px) scale(1.0); /* leve agrandamiento */
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@keyframes orb-movingUpRight {
+  0% {
+    transform: translate(0, 0) scale(0.1);
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  100% {
+    transform: translate(155px, -105px) scale(1.0); /* leve agrandamiento */
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@keyframes orb-movingUpLeft {
+  0% {
+    transform: translate(0, 0) scale(0.1);
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  100% {
+    transform: translate(-105px, -105px) scale(1.0); /* leve agrandamiento */
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@keyframes orb-movingDown {
+  0% {
+    transform: translate(20px, 0) scale(0.1);
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  100% {
+    transform: translate(20px, 200px) scale(1.0); /* leve agrandamiento */
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@keyframes orb-movingDownRight {
+  0% {
+    transform: translate(0, 0) scale(0.1);
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  100% {
+    transform: translate(155px, 135px) scale(1.0); /* leve agrandamiento */
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@keyframes orb-movingDownLeft {
+  0% {
+    transform: translate(0, 0) scale(0.1);
+    box-shadow:
+     0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 15px #228be6;
+  }
+  100% {
+    transform: translate(-105px, 135px) scale(1.0); /* leve agrandamiento */
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 10px #a5d8ff,
+      0 0 12px #4dabf7,
+      0 0 18px #228be6; /* glow más intenso en el pico */
+  }
+}
+
+@media (max-width: 720px) {
+  .text {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 620px) {
+  .versions {
+    display: none;
+  }
+}
+
+@media (max-width: 350px) {
+  .tip,
+  .actions {
+    display: none;
+  }
+}
