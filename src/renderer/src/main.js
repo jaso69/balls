@@ -238,6 +238,7 @@ function addTextToOrb(orb, position) {
   textInside.style.color = '#2C3E50'
   textInside.style.fontSize = '12px'
   textInside.style.fontWeight = 'bold'
+  textInside.classList.add('m2t')
   //textInside.style.zIndex = '2'
   orb.appendChild(textInside)
 }

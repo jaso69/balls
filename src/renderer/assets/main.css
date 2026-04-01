@@ -21,6 +21,24 @@
   animation: c2 3s ease-in-out infinite; /* 4s = ritmo lento */
 }
 
+.m1t {
+  transform: translateX(-50%); /* centra perfectamente */
+  opacity: 0.7;          /* brillo base */
+  animation: c2 1s ease-in-out infinite; /* 4s = ritmo lento */
+}
+
+.m2t {
+  transform: translateX(-50%); /* centra perfectamente */
+  opacity: 0.7;          /* brillo base */
+  animation: c1t 2s ease-in-out infinite; /* 4s = ritmo lento */
+}
+
+.m3t {
+  transform: translateX(-50%); /* centra perfectamente */
+  opacity: 0.7;          /* brillo base */
+  animation: c2 3s ease-in-out infinite; /* 4s = ritmo lento */
+}
+
 .p1 {
   top: 10%;              /* posición vertical fija */
   left: 5%;
@@ -70,6 +88,12 @@
   0%, 100% { opacity: 0; }    /* casi invisible */
   50%      { opacity: 1; }      /* máximo brillo */
 }
+
+@keyframes c1t {
+  0%, 100% { opacity: 0,6; }    /* casi invisible */
+  50%      { opacity: 1; color: #1b0801;}      /* máximo brillo */
+}
+
 
 /* Contenedor principal (tu background o body) */
 body, .background-container {
