@@ -7,5 +7,7 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "appmod.enableMcpServer": true,
+  "github.copilot.chat.agent.autoFix": true
 }

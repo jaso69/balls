@@ -1,22 +1,32 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
-console.log('🔧 PRELOAD: Iniciando carga...')
-
-// Exponer APIs
 try {
   contextBridge.exposeInMainWorld('electron', {
     leerDirectorios: (rutaBase) => {
-      console.log('📞 PRELOAD: llamando a leerDirectorios con:', rutaBase)
       return ipcRenderer.invoke('leer-directorios', rutaBase)
     },
     seleccionarDirectorio: () => {
-      console.log('📞 PRELOAD: llamando a seleccionarDirectorio')
       return ipcRenderer.invoke('seleccionar-directorio')
+    },
+    cerrarApp: () => {
+      ipcRenderer.send('cerrar-app')
+    },
+    leerArchivos: (rutaCarpeta) => {
+      return ipcRenderer.invoke('leer-archivos', rutaCarpeta)
+    },
+    abrirArchivo: (rutaArchivo) => {
+      return ipcRenderer.invoke('abrir-archivo', rutaArchivo)
+    },
+    contenidoArchivo: (rutaArchivo) => {
+      return ipcRenderer.invoke('contenido-archivo', rutaArchivo)
     }
   })
-  console.log('✅ PRELOAD: API expuesta correctamente')
-} catch (error) {
-  console.error('❌ PRELOAD: Error al exponer API:', error)
+} catch (e) {
+  console.error('PRELOAD ERROR:', e)
 }
 
-console.log('🔧 PRELOAD: Cargado completamente')
+try {
+  contextBridge.exposeInMainWorld('__preload_ok', true)
+} catch (e) {
+  // ignore
+}
