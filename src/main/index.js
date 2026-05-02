@@ -1,17 +1,69 @@
-import { app, shell, BrowserWindow, ipcMain, dialog, screen } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import fs from 'fs/promises'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-app.disableHardwareAcceleration()
-app.commandLine.appendSwitch('disable-gpu-sandbox')
-app.commandLine.appendSwitch('disable-accelerated-video-decode')
+const CONFIG_PATH = join(app.getPath('userData'), 'config.json')
+const DEFAULT_RESOURCES = path.join(__dirname, '../../resources')
+
+function loadConfig() {
+  try {
+    if (existsSync(CONFIG_PATH)) {
+      return JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'))
+    }
+  } catch (e) {
+    console.error('Error loading config:', e)
+  }
+  return {}
+}
+
+function saveConfig(config) {
+  try {
+    writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2), 'utf-8')
+  } catch (e) {
+    console.error('Error saving config:', e)
+  }
+}
+
+async function getResourcesPath() {
+  const config = loadConfig()
+  if (config.resourcesPath && existsSync(config.resourcesPath)) {
+    return config.resourcesPath
+  }
+
+  const result = await dialog.showMessageBox({
+    type: 'question',
+    title: 'Carpeta de contenido',
+    message: '¿Quieres seleccionar la carpeta de recursos o usar la predeterminada?',
+    detail: `Predeterminada: ${DEFAULT_RESOURCES}`,
+    buttons: ['Seleccionar carpeta', 'Usar predeterminada'],
+    defaultId: 1,
+    cancelId: 1
+  })
+
+  let selectedPath = DEFAULT_RESOURCES
+
+  if (result.response === 0) {
+    const dirResult = await dialog.showOpenDialog({
+      title: 'Selecciona la carpeta de recursos',
+      properties: ['openDirectory']
+    })
+    if (!dirResult.canceled && dirResult.filePaths.length > 0) {
+      selectedPath = dirResult.filePaths[0]
+    }
+  }
+
+  config.resourcesPath = selectedPath
+  saveConfig(config)
+  return selectedPath
+}
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -151,6 +203,31 @@ ipcMain.handle('seleccionar-directorio', async () => {
   return { error: 'No se seleccionó ningún directorio' }
 })
 
+ipcMain.handle('obtener-ruta-resources', async () => {
+  return loadConfig().resourcesPath || DEFAULT_RESOURCES
+})
+
+ipcMain.handle('cambiar-carpeta-resources', async () => {
+  const result = await dialog.showOpenDialog({
+    title: 'Selecciona la nueva carpeta de recursos',
+    properties: ['openDirectory']
+  })
+  if (!result.canceled && result.filePaths.length > 0) {
+    const config = loadConfig()
+    config.resourcesPath = result.filePaths[0]
+    saveConfig(config)
+    return { ruta: result.filePaths[0] }
+  }
+  return { error: 'No se seleccionó ningún directorio' }
+})
+
+ipcMain.handle('abrir-carpeta-resources', async () => {
+  const config = loadConfig()
+  const ruta = config.resourcesPath || DEFAULT_RESOURCES
+  await shell.openPath(ruta)
+  return { ok: true }
+})
+
 process.on('uncaughtException', (err) => {
   console.error('[MAIN] UNCAUGHT:', err)
 })
@@ -159,7 +236,7 @@ process.on('unhandledRejection', (reason) => {
   console.error('[MAIN] UNHANDLED REJECTION:', reason)
 })
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   electronApp.setAppUserModelId('com.electron')
 
   app.on('browser-window-created', (_, window) => {
@@ -170,6 +247,7 @@ app.whenReady().then(() => {
     app.quit()
   })
 
+  await getResourcesPath()
   createWindow()
 
   app.on('activate', function () {

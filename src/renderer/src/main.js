@@ -104,7 +104,11 @@ async function cargarCarpetas(rutaBase) {
 }
 
 async function inicializar() {
-  await cargarCarpetas('/home/jose/Escritorio/naturgy/naturgy/resources')
+  if (window.electron && window.electron.obtenerRutaResources) {
+    const ruta = await window.electron.obtenerRutaResources()
+    console.log('📁 Ruta resources:', ruta)
+    await cargarCarpetas(ruta)
+  }
   console.log('Carpetas cargadas:', carpetas)
 }
 inicializar()
@@ -704,6 +708,35 @@ function initDrawing() {
   toggleBtn.textContent = '✏️'
   toggleBtn.style.cssText = 'width:32px;height:32px;border:1px solid rgba(100,180,255,0.2);border-radius:6px;background:rgba(34,139,230,0.1);color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;'
 
+  const folderBtn = document.createElement('button')
+  folderBtn.classList.add('draw-btn')
+  folderBtn.title = 'Abrir carpeta de contenido'
+  folderBtn.textContent = '📂'
+  folderBtn.style.cssText = 'width:32px;height:32px;border:1px solid rgba(100,180,255,0.2);border-radius:6px;background:rgba(34,139,230,0.1);color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;'
+  folderBtn.addEventListener('click', (e) => {
+    e.stopPropagation()
+    if (window.electron && window.electron.abrirCarpetaResources) {
+      window.electron.abrirCarpetaResources()
+    }
+  })
+
+  const changeFolderBtn = document.createElement('button')
+  changeFolderBtn.classList.add('draw-btn')
+  changeFolderBtn.title = 'Cambiar carpeta de contenido'
+  changeFolderBtn.textContent = '📁'
+  changeFolderBtn.style.cssText = 'width:32px;height:32px;border:1px solid rgba(100,180,255,0.2);border-radius:6px;background:rgba(34,139,230,0.1);color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;'
+  changeFolderBtn.addEventListener('click', async (e) => {
+    e.stopPropagation()
+    if (window.electron && window.electron.cambiarCarpetaResources) {
+      const result = await window.electron.cambiarCarpetaResources()
+      if (result.ruta) {
+        carpetas = []
+        await cargarCarpetas(result.ruta)
+        console.log('Carpetas recargadas:', carpetas)
+      }
+    }
+  })
+
   const toolsDiv = document.createElement('div')
   toolsDiv.id = 'draw-tools'
   toolsDiv.classList.add('draw-tools', 'hidden')
@@ -758,7 +791,7 @@ function initDrawing() {
   const closeBtn = makeBtn('❌', 'Cerrar pizarra', false)
 
   toolsDiv.append(pencilBtn, eraserBtn, colorInput, sizeInput, sizeLabel, makeSep(), bgTransparent, bgWhite, bgBlack, makeSep(), clearBtn, closeBtn)
-  toolbar.append(toggleBtn, toolsDiv)
+  toolbar.append(toggleBtn, folderBtn, changeFolderBtn, toolsDiv)
   document.body.appendChild(toolbar)
   console.log('🎨 Toolbar creada:', toolbar)
   console.log('🎨 Canvas creado:', canvas)

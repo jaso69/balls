@@ -2,31 +2,16 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 try {
   contextBridge.exposeInMainWorld('electron', {
-    leerDirectorios: (rutaBase) => {
-      return ipcRenderer.invoke('leer-directorios', rutaBase)
-    },
-    seleccionarDirectorio: () => {
-      return ipcRenderer.invoke('seleccionar-directorio')
-    },
-    cerrarApp: () => {
-      ipcRenderer.send('cerrar-app')
-    },
-    leerArchivos: (rutaCarpeta) => {
-      return ipcRenderer.invoke('leer-archivos', rutaCarpeta)
-    },
-    abrirArchivo: (rutaArchivo) => {
-      return ipcRenderer.invoke('abrir-archivo', rutaArchivo)
-    },
-    contenidoArchivo: (rutaArchivo) => {
-      return ipcRenderer.invoke('contenido-archivo', rutaArchivo)
-    }
+    obtenerRutaResources: () => ipcRenderer.invoke('obtener-ruta-resources'),
+    cambiarCarpetaResources: () => ipcRenderer.invoke('cambiar-carpeta-resources'),
+    abrirCarpetaResources: () => ipcRenderer.invoke('abrir-carpeta-resources'),
+    leerDirectorios: (rutaBase) => ipcRenderer.invoke('leer-directorios', rutaBase),
+    seleccionarDirectorio: () => ipcRenderer.invoke('seleccionar-directorio'),
+    cerrarApp: () => ipcRenderer.send('cerrar-app'),
+    leerArchivos: (rutaCarpeta) => ipcRenderer.invoke('leer-archivos', rutaCarpeta),
+    abrirArchivo: (rutaArchivo) => ipcRenderer.invoke('abrir-archivo', rutaArchivo),
+    contenidoArchivo: (rutaArchivo) => ipcRenderer.invoke('contenido-archivo', rutaArchivo)
   })
 } catch (e) {
   console.error('PRELOAD ERROR:', e)
-}
-
-try {
-  contextBridge.exposeInMainWorld('__preload_ok', true)
-} catch (e) {
-  // ignore
 }
