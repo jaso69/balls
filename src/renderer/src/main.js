@@ -762,6 +762,9 @@ function initDrawing() {
 
   const pencilBtn = makeBtn('✏️', 'Lápiz', true)
   const eraserBtn = makeBtn('🧹', 'Borrador', false)
+  const lineBtn = makeBtn('📏', 'Línea', false)
+  const rectBtn = makeBtn('⬜', 'Rectángulo', false)
+  const circleBtn = makeBtn('⭕', 'Círculo', false)
 
   const colorInput = document.createElement('input')
   colorInput.type = 'color'
@@ -790,7 +793,7 @@ function initDrawing() {
   const clearBtn = makeBtn('🗑️', 'Limpiar pizarra', false)
   const closeBtn = makeBtn('❌', 'Cerrar pizarra', false)
 
-  toolsDiv.append(pencilBtn, eraserBtn, colorInput, sizeInput, sizeLabel, makeSep(), bgTransparent, bgWhite, bgBlack, makeSep(), clearBtn, closeBtn)
+  toolsDiv.append(pencilBtn, eraserBtn, lineBtn, rectBtn, circleBtn, colorInput, sizeInput, sizeLabel, makeSep(), bgTransparent, bgWhite, bgBlack, makeSep(), clearBtn, closeBtn)
   toolbar.append(toggleBtn, folderBtn, changeFolderBtn, toolsDiv)
   document.body.appendChild(toolbar)
   console.log('🎨 Toolbar creada:', toolbar)
@@ -804,6 +807,10 @@ function initDrawing() {
   let lastX = 0
   let lastY = 0
   let isActive = false
+  let shapeStartX = 0
+  let shapeStartY = 0
+  let savedShapes = []
+  let currentShape = null
 
   function resizeCanvas() {
     canvas.width = window.innerWidth
@@ -837,6 +844,8 @@ function initDrawing() {
     const pos = getPos(e)
     lastX = pos.x
     lastY = pos.y
+    shapeStartX = pos.x
+    shapeStartY = pos.y
   }
 
   function drawLine(e) {
@@ -857,25 +866,111 @@ function initDrawing() {
       ctx.strokeStyle = colorInput.value
     }
 
-    ctx.beginPath()
-    ctx.moveTo(lastX, lastY)
-    ctx.lineTo(pos.x, pos.y)
-    ctx.stroke()
+    if (tool === 'pencil' || tool === 'eraser') {
+      ctx.beginPath()
+      ctx.moveTo(lastX, lastY)
+      ctx.lineTo(pos.x, pos.y)
+      ctx.stroke()
+    } else if (tool === 'line' || tool === 'rect' || tool === 'circle') {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      redrawBackground()
+      ctx.lineWidth = parseInt(sizeInput.value)
+      ctx.strokeStyle = colorInput.value
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      if (tool === 'line') {
+        ctx.beginPath()
+        ctx.moveTo(shapeStartX, shapeStartY)
+        ctx.lineTo(pos.x, pos.y)
+        ctx.stroke()
+      } else if (tool === 'rect') {
+        const w = pos.x - shapeStartX
+        const h = pos.y - shapeStartY
+        ctx.strokeRect(shapeStartX, shapeStartY, w, h)
+      } else if (tool === 'circle') {
+        const radiusX = Math.abs(pos.x - shapeStartX)
+        const radiusY = Math.abs(pos.y - shapeStartY)
+        const radius = Math.max(radiusX, radiusY)
+        ctx.beginPath()
+        ctx.arc(shapeStartX, shapeStartY, radius, 0, Math.PI * 2)
+        ctx.stroke()
+      }
+      for (const s of savedShapes) {
+        ctx.lineWidth = s.size
+        ctx.strokeStyle = s.color
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
+        if (s.tool === 'line') {
+          ctx.beginPath()
+          ctx.moveTo(s.shapeStartX, s.shapeStartY)
+          ctx.lineTo(s.lastX, s.lastY)
+          ctx.stroke()
+        } else if (s.tool === 'rect') {
+          const w = s.lastX - s.shapeStartX
+          const h = s.lastY - s.shapeStartY
+          ctx.strokeRect(s.shapeStartX, s.shapeStartY, w, h)
+        } else if (s.tool === 'circle') {
+          const radiusX = Math.abs(s.lastX - s.shapeStartX)
+          const radiusY = Math.abs(s.lastY - s.shapeStartY)
+          const radius = Math.max(radiusX, radiusY)
+          ctx.beginPath()
+          ctx.arc(s.shapeStartX, s.shapeStartY, radius, 0, Math.PI * 2)
+          ctx.stroke()
+        }
+      }
+    }
 
     lastX = pos.x
     lastY = pos.y
   }
 
   function endDraw() {
+    if (drawing && (tool === 'line' || tool === 'rect' || tool === 'circle')) {
+      savedShapes.push({ tool, shapeStartX, shapeStartY, lastX, lastY, color: colorInput.value, size: sizeInput.value })
+    }
     drawing = false
+  }
+
+  function redrawAllShapes() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    redrawBackground()
+    for (const s of savedShapes) {
+      ctx.lineWidth = s.size
+      ctx.strokeStyle = s.color
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      if (s.tool === 'line') {
+        ctx.beginPath()
+        ctx.moveTo(s.shapeStartX, s.shapeStartY)
+        ctx.lineTo(s.lastX, s.lastY)
+        ctx.stroke()
+      } else if (s.tool === 'rect') {
+        const w = s.lastX - s.shapeStartX
+        const h = s.lastY - s.shapeStartY
+        ctx.strokeRect(s.shapeStartX, s.shapeStartY, w, h)
+      } else if (s.tool === 'circle') {
+        const radiusX = Math.abs(s.lastX - s.shapeStartX)
+        const radiusY = Math.abs(s.lastY - s.shapeStartY)
+        const radius = Math.max(radiusX, radiusY)
+        ctx.beginPath()
+        ctx.arc(s.shapeStartX, s.shapeStartY, radius, 0, Math.PI * 2)
+        ctx.stroke()
+      }
+    }
   }
 
   function setTool(t) {
     tool = t
     pencilBtn.classList.toggle('active', t === 'pencil')
     eraserBtn.classList.toggle('active', t === 'eraser')
+    lineBtn.classList.toggle('active', t === 'line')
+    rectBtn.classList.toggle('active', t === 'rect')
+    circleBtn.classList.toggle('active', t === 'circle')
     pencilBtn.style.background = t === 'pencil' ? 'rgba(34,139,230,0.5)' : 'rgba(34,139,230,0.1)'
     eraserBtn.style.background = t === 'eraser' ? 'rgba(34,139,230,0.5)' : 'rgba(34,139,230,0.1)'
+    lineBtn.style.background = t === 'line' ? 'rgba(34,139,230,0.5)' : 'rgba(34,139,230,0.1)'
+    rectBtn.style.background = t === 'rect' ? 'rgba(34,139,230,0.5)' : 'rgba(34,139,230,0.1)'
+    circleBtn.style.background = t === 'circle' ? 'rgba(34,139,230,0.5)' : 'rgba(34,139,230,0.1)'
   }
 
   function setBg(bg) {
@@ -925,6 +1020,9 @@ function initDrawing() {
 
   pencilBtn.addEventListener('click', (e) => { stopAll(e); setTool('pencil') })
   eraserBtn.addEventListener('click', (e) => { stopAll(e); setTool('eraser') })
+  lineBtn.addEventListener('click', (e) => { stopAll(e); setTool('line') })
+  rectBtn.addEventListener('click', (e) => { stopAll(e); setTool('rect') })
+  circleBtn.addEventListener('click', (e) => { stopAll(e); setTool('circle') })
 
   sizeInput.addEventListener('input', () => {
     sizeLabel.textContent = `${sizeInput.value}px`
@@ -941,12 +1039,14 @@ function initDrawing() {
   clearBtn.addEventListener('click', (e) => {
     stopAll(e)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    savedShapes = []
     redrawBackground()
   })
 
   closeBtn.addEventListener('click', (e) => {
     stopAll(e)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    savedShapes = []
     isActive = false
     toggleDrawing(false)
   })
